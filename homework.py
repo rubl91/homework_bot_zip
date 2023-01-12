@@ -18,14 +18,14 @@ PRACTICUM_TOKEN = getenv('PRACTICUM_TOKEN')
 TELEGRAM_TOKEN = getenv('TELEGRAM_TOKEN')
 TELEGRAM_CHAT_ID = getenv('TELEGRAM_CHAT_ID')
 
-RETRY_TIME = 600
+RETRY_PERIOD = 600
 ENDPOINT = 'https://practicum.yandex.ru/api/user_api/homework_statuses/'
 HEADERS = {'Authorization': f'OAuth {PRACTICUM_TOKEN}'}
 
-HOMEWORK_STATUSES = {
-    'approved': 'Работа проверена, замечаний нет',
-    'reviewing': 'Работа проверяется',
-    'rejected': 'Работа проверена, есть замечания'
+HOMEWORK_VERDICTS = {
+    'approved': 'Работа проверена: ревьюеру всё понравилось. Ура!',
+    'reviewing': 'Работа взята на проверку ревьюером.',
+    'rejected': 'Работа проверена: у ревьюера есть замечания.'
 }
 
 logger = logging.getLogger(__name__)
@@ -120,11 +120,11 @@ def parse_status(homework):
     В качестве параметра функция получает только один элемент из списка
     домашних работ. В случае успеха, функция возвращает подготовленную для
     отправки в Telegram строку, содержащую один из вердиктов словаря
-    HOMEWORK_STATUSES.
+    HOMEWORK_VERDICTS.
     """
     homework_name = homework.get('homework_name')
     homework_status = homework.get('status')
-    verdict = HOMEWORK_STATUSES.get(homework_status)
+    verdict = HOMEWORK_VERDICTS.get(homework_status)
     if homework_name is None:
         raise KeyError(
             'Словарь с домашней работой не содержит ключ "homework_name"'
