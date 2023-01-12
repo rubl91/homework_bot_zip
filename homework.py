@@ -170,8 +170,8 @@ def main():
             message = f'Сбой в работе программы: {error}'
             send_message(bot, message)
         finally:
-            logger.info('Переход в режим ожидания: %d с', RETRY_TIME)
-            time.sleep(RETRY_TIME)
+            logger.info('Переход в режим ожидания: %d с', RETRY_PERIOD)
+            time.sleep(RETRY_PERIOD)
 
 
 if __name__ == '__main__':
