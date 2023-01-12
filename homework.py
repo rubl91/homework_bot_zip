@@ -40,6 +40,10 @@ handler.setFormatter(formatter)
 
 
 def send_message(bot, message):
+    """Отправляет сообщение в Telegram чат.
+       Принимает на вход два параметра: экземпляр класса
+       Bot и строку с текстом сообщения.
+    """
     try:
         bot.send_message(TELEGRAM_CHAT_ID, message)
         logger.info('Успешная отправка сообщения  %s', message)
@@ -48,6 +52,11 @@ def send_message(bot, message):
 
 
 def get_api_answer(current_timestamp):
+    """Запрос к единственному эндпоинту API-сервиса.
+       В качестве параметра параметра функция получает временную метку.
+       В случае успешного запроса должна вернуть ответ API, преобразовав
+       его из формата JSON к типам данных Python.
+    """
     logger.info('Начало запроса к API')
     timestamp = current_timestamp
     params = {'from_date': timestamp}
@@ -79,6 +88,12 @@ def get_api_answer(current_timestamp):
 
 
 def check_response(response):
+    """Проверка ответа API на корректность.
+       В качестве параметра функция получает ответ API, приведенный к типам
+       данных Python. Если ответ API соответствует ожиданиям, то функция
+       должна вернуть список домашних работ (он может быть и пустым),
+       доступный в ответе API по ключу 'homeworks'.
+    """
     logger.info('Проверка ответа API на корректность')
     if not response:
         raise EmptyDictInResponseError('Ответ от API содержит пустой словарь')
@@ -98,6 +113,12 @@ def check_response(response):
 
 
 def parse_status(homework):
+    """Извлекает из информации о конкретной домашней работе статус работы.
+       В качестве параметра функция получает только один элемент из списка
+       домашних работ. В случае успеха, функция возвращает подготовленную для
+       отправки в Telegram строку, содержащую один из вердиктов словаря
+       HOMEWORK_STATUSES.
+    """
     homework_name = homework.get('homework_name')
     homework_status = homework.get('status')
     verdict = HOMEWORK_STATUSES.get(homework_status)
@@ -118,10 +139,12 @@ def parse_status(homework):
 
 
 def check_tokens():
+    """Проверка доступности переменных окружения."""
     return all((PRACTICUM_TOKEN, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID))
 
 
 def main():
+    """Основная логика работы бота."""
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     current_timestamp = int(time.time())
     if not check_tokens():
