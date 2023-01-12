@@ -1,9 +1,10 @@
-from http import HTTPStatus
 import logging
 import sys
 import requests
 import telegram
 import time
+
+from http import HTTPStatus
 
 from os import getenv
 
@@ -13,7 +14,6 @@ from exceptions import EmptyDictInResponseError, JSONError, StatusCodeError
 
 load_dotenv()
 
-
 PRACTICUM_TOKEN = getenv('PRACTICUM_TOKEN')
 TELEGRAM_TOKEN = getenv('TELEGRAM_TOKEN')
 TELEGRAM_CHAT_ID = getenv('TELEGRAM_CHAT_ID')
@@ -21,7 +21,6 @@ TELEGRAM_CHAT_ID = getenv('TELEGRAM_CHAT_ID')
 RETRY_TIME = 600
 ENDPOINT = 'https://practicum.yandex.ru/api/user_api/homework_statuses/'
 HEADERS = {'Authorization': f'OAuth {PRACTICUM_TOKEN}'}
-
 
 HOMEWORK_STATUSES = {
     'approved': 'Работа проверена, замечаний нет',
@@ -40,9 +39,10 @@ handler.setFormatter(formatter)
 
 
 def send_message(bot, message):
-    """Отправляет сообщение в Telegram чат.
-       Принимает на вход два параметра: экземпляр класса
-       Bot и строку с текстом сообщения.
+    """
+    Отправляет сообщение в Telegram чат.
+    Принимает на вход два параметра: экземпляр класса
+    Bot и строку с текстом сообщения.
     """
     try:
         bot.send_message(TELEGRAM_CHAT_ID, message)
@@ -52,10 +52,11 @@ def send_message(bot, message):
 
 
 def get_api_answer(current_timestamp):
-    """Запрос к единственному эндпоинту API-сервиса.
-       В качестве параметра параметра функция получает временную метку.
-       В случае успешного запроса должна вернуть ответ API, преобразовав
-       его из формата JSON к типам данных Python.
+    """
+    Запрос к единственному эндпоинту API-сервиса.
+    В качестве параметра параметра функция получает временную метку.
+    В случае успешного запроса должна вернуть ответ API, преобразовав
+    его из формата JSON к типам данных Python.
     """
     logger.info('Начало запроса к API')
     timestamp = current_timestamp
@@ -88,11 +89,12 @@ def get_api_answer(current_timestamp):
 
 
 def check_response(response):
-    """Проверка ответа API на корректность.
-       В качестве параметра функция получает ответ API, приведенный к типам
-       данных Python. Если ответ API соответствует ожиданиям, то функция
-       должна вернуть список домашних работ (он может быть и пустым),
-       доступный в ответе API по ключу 'homeworks'.
+    """
+    Проверка ответа API на корректность.
+    В качестве параметра функция получает ответ API, приведенный к типам
+    данных Python. Если ответ API соответствует ожиданиям, то функция
+    должна вернуть список домашних работ (он может быть и пустым),
+    доступный в ответе API по ключу 'homeworks'.
     """
     logger.info('Проверка ответа API на корректность')
     if not response:
@@ -113,11 +115,12 @@ def check_response(response):
 
 
 def parse_status(homework):
-    """Извлекает из информации о конкретной домашней работе статус работы.
-       В качестве параметра функция получает только один элемент из списка
-       домашних работ. В случае успеха, функция возвращает подготовленную для
-       отправки в Telegram строку, содержащую один из вердиктов словаря
-       HOMEWORK_STATUSES.
+    """
+    Извлекает из информации о конкретной домашней работе статус работы.
+    В качестве параметра функция получает только один элемент из списка
+    домашних работ. В случае успеха, функция возвращает подготовленную для
+    отправки в Telegram строку, содержащую один из вердиктов словаря
+    HOMEWORK_STATUSES.
     """
     homework_name = homework.get('homework_name')
     homework_status = homework.get('status')
