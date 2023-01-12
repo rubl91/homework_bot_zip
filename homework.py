@@ -40,7 +40,7 @@ handler.setFormatter(formatter)
 
 def send_message(bot, message):
     """
-    Отправляет сообщение в Telegram чат.
+    Отсылает сообщение в Telegram чат.
     Принимает на вход два параметра: экземпляр класса
     Bot и строку с текстом сообщения.
     """
