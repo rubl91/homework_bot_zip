@@ -46,7 +46,7 @@ def send_message(bot, message):
     """
     try:
         bot.send_message(TELEGRAM_CHAT_ID, message)
-        logger.info('Успешная отправка сообщения  %s', message)
+        logger.debug('Успешная отправка сообщения  %s', message)
     except Exception as error:
         logger.error('Сбой при отправке сообщения %s', error)
 
